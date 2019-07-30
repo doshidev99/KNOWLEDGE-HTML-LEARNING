@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <select id="age-filter">
+        <option value="20">20</option>
+        <option value="18">18</option>
+        <option value="19">19</option>
+    </select>
+    <p>Name ||| Age</p>
+    <table id="tableTab">
+    </table>
+<script>
+    var listPerson = [
+        { name: 'lucy', age: 18 },
+        { name: 'center', age: 18 },
+        { name: 'center', age: 18 },
+        { name: 'david', age: 20 },
+        { name: 'david', age: 20 },
+        { name: 'david', age: 20 },
+        { name: 'center', age: 19 },
+        { name: 'center', age: 19 },
+        { name: 'center', age: 19 },
+        { name: 'center', age: 19 },
+    ];
+    
+    var ageFilter = document.getElementById('age-filter');
+    ageFilter.addEventListener('change', onAgeFilterChange);
+
+    function onAgeFilterChange() {
+        var selectedAge = Number(ageFilter.value);
+        var filterPerson = listPerson.filter(function(person) {
+            return person.age === selectedAge;
+        });
+        render(filterPerson);
+    }
+
+    function render(persons) {
+        var tableTab = document.getElementById('tableTab');
+        var content = persons.map((person) => {
+            return `<tr><td> ${person.name} </td><td> ${person.age} </td></tr>`;
+        }).join('');
+        tableTab.innerHTML = content;
+    }
+    render(listPerson);
+</script>
+</body>
+
+
+</html>

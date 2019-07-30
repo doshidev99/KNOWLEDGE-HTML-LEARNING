@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <h1> Todo list</h1>
+    <input type="text" id="newItem">
+    <button id="add-btn">Add</button>
+    <ul id="todo-list"><!-- // children //textContent //appendChild() //remove --></ul>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var url = 'http://localhost:9081/todoList';
+
+        axios.get(url).then((res) => {
+            var items = res.data;
+            console.log(items);
+            render(items);
+        });
+
+        var addBtn = document.getElementById('add-btn');
+        // addBtn.onclick = addItem;
+        addBtn.addEventListener('click', addItem) //trigger an event
+
+        function addItem() {
+            var newItem = document.getElementById('newItem');
+            todoList.push(newItem.value);
+            render();
+            newItem.value = '';
+        }
+       
+        function render(items) {
+            var htmlList = document.getElementById('todo-list');
+            var content = items.map((item) => {
+                return `<li> ${item.content} </li>`
+            }).join('')
+            htmlList.innerHTML = content;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Welcome to Firebase Hosting</title>
+
+  <!-- update the version number as needed -->
+  <script defer src="/__/firebase/6.3.0/firebase-app.js"></script>
+  <!-- include only the Firebase features as you need -->
+  <script defer src="/__/firebase/6.3.0/firebase-auth.js"></script>
+  <script defer src="/__/firebase/6.3.0/firebase-database.js"></script>
+
+  <script defer src="/__/firebase/6.3.0/firebase-firestore.js"></script>
+
+  <script defer src="/__/firebase/6.3.0/firebase-messaging.js"></script>
+  <script defer src="/__/firebase/6.3.0/firebase-storage.js"></script>
+  <!-- initialize the SDK after all desired features are loaded -->
+
+  <script defer src="/__/firebase/init.js"></script>
+</head>
+
+<body>
+  <h1> Todo list</h1>
+  <input type="text" id="newItem">
+  <button id="add-btn">Add</button>
+  <ul id="todo-list">
+    <!-- // children //textContent //appendChild() //remove -->
+  </ul>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var db = firebase.firestore();
+      var todoList = [];
+      db.collection('todoList').get().then((snap) => {
+        todoList = snap.docs;
+        render();
+      });
+      var addBtn = document.getElementById('add-btn');
+      // addBtn.onclick = addItem;
+      addBtn.addEventListener('click', addItem) //trigger an event
+
+      function addItem() {
+        var input = document.getElementById('newItem');
+        var newItem = {
+          content: input.value
+        };
+        db.collection('todoList').add(newItem)
+          .then(function (docRef) { //document reference
+            return docRef.get();
+          }).then(function (snap) {
+            todoList.push(snap);
+            render();
+            input.value = '';
+          });
+      }
+
+      function render() {
+        var htmlList = document.getElementById('todo-list');
+        var content = todoList.map((item) => {
+          var data = item.data();
+          return `<li> ${data.content} </li>`
+        }).join('')
+        htmlList.innerHTML = content;
+      }
+    });
+  </script>
+</body>
+
+</html>
